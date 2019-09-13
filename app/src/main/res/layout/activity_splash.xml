@@ -6,6 +6,11 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		tools:context=".view.SplashActivity" android:background="@color/backgroundDark">
+	<ImageView
+			android:layout_width="match_parent"
+			android:layout_height="match_parent" app:srcCompat="@drawable/background"
+			tools:layout_editor_absoluteY="5dp" tools:layout_editor_absoluteX="0dp" android:id="@+id/imageView5"
+			android:alpha="0.2"/>
 	<ProgressBar
 			android:layout_width="100dp"
 			android:layout_height="100dp"

@@ -1,10 +1,14 @@
 package com.yago.texsnapper.view;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.Application;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import com.yago.texsnapper.R;
@@ -35,7 +39,7 @@ public class SplashActivity extends AppCompatActivity {
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 		if (requestCode == 1) {
 			if (Arrays.equals(grantResults, new int[]{PackageManager.PERMISSION_GRANTED, PackageManager.PERMISSION_GRANTED, PackageManager.PERMISSION_GRANTED})) {
-
+				startActivity(new Intent(SplashActivity.this, MenuActivity.class));
 			} else {
 				finishAffinity();
 			}
