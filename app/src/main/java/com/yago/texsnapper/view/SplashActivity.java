@@ -18,9 +18,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SplashActivity extends AppCompatActivity {
-	private final boolean CAMERA = ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
-	private final boolean READ_STORAGE = ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-	private final boolean WRITE_STORAGE = ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 	private final List<String> pendingPerms = new ArrayList<>();
 
 	@Override
@@ -28,11 +25,18 @@ public class SplashActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
 
-		if (!CAMERA) pendingPerms.add(Manifest.permission.CAMERA);
+		boolean READ_STORAGE = ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+		boolean WRITE_STORAGE = ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
 		if (!READ_STORAGE) pendingPerms.add(Manifest.permission.READ_EXTERNAL_STORAGE);
 		if (!WRITE_STORAGE) pendingPerms.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-		ActivityCompat.requestPermissions(this, pendingPerms.toArray(new String[0]), 1);
+		if (pendingPerms.size() == 0) {
+			startActivity(new Intent(SplashActivity.this, MenuActivity.class));
+			finish();
+		} else {
+			ActivityCompat.requestPermissions(this, pendingPerms.toArray(new String[0]), 1);
+		}
 	}
 
 	@Override
@@ -40,6 +44,7 @@ public class SplashActivity extends AppCompatActivity {
 		if (requestCode == 1) {
 			if (Arrays.equals(grantResults, new int[]{PackageManager.PERMISSION_GRANTED, PackageManager.PERMISSION_GRANTED, PackageManager.PERMISSION_GRANTED})) {
 				startActivity(new Intent(SplashActivity.this, MenuActivity.class));
+				finish();
 			} else {
 				finishAffinity();
 			}
