@@ -100,27 +100,10 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
 					Bitmap img = (Bitmap) data.getExtras().get("data");
 					global.setSourceImage(img);
 					Toast.makeText(this, "Imagem cortada com sucesso!", Toast.LENGTH_SHORT).show();
+					startActivity(new Intent(MenuActivity.this, MappingActivity.class));
+					finish();
 				}
 				break;
 		}
-	}
-
-	public String getFullPath(Uri uri) {
-
-		String path;
-		String[] projection = { MediaStore.Files.FileColumns.DATA };
-		Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
-
-		if(cursor == null){
-			path = uri.getPath();
-		}
-		else{
-			cursor.moveToFirst();
-			int column_index = cursor.getColumnIndexOrThrow(projection[0]);
-			path = cursor.getString(column_index);
-			cursor.close();
-		}
-
-		return ((path == null || path.isEmpty()) ? (uri.getPath()) : path);
 	}
 }
