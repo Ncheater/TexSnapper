@@ -15,9 +15,9 @@ import com.yago.texsnapper.view.fragment.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MappingActivity extends AppCompatActivity {
+public class MappingActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
 
-	private final List<Fragment> frags = new ArrayList<Fragment>(){{
+	private List<Fragment> frags = new ArrayList<Fragment>(){{
 		add(new DiffuseFragment());
 		add(new HeightFragment());
 		add(new RoughnessFragment());
@@ -32,6 +32,9 @@ public class MappingActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_mapping);
 		TabLayout tabs = findViewById(R.id.tabLayout);
 		FloatingActionButton save = findViewById(R.id.save);
+		FragmentTransaction transaction = manager.beginTransaction();
+		transaction.replace(R.id.fragment, frags.get(0)).commitNow();
+
 		save.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -39,25 +42,22 @@ public class MappingActivity extends AppCompatActivity {
 			}
 		});
 
-		tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-			@Override
-			public void onTabSelected(TabLayout.Tab tab) {
-				FragmentTransaction transaction = manager.beginTransaction();
-				transaction.replace(R.id.fragment, frags.get(tab.getPosition()));
-				transaction.commit();
+		tabs.addOnTabSelectedListener(this);
+	}
 
-				View holder = findViewById(R.id.fragment);
-			}
+	@Override
+	public void onTabSelected(TabLayout.Tab tab) {
+		FragmentTransaction transaction = manager.beginTransaction();
+		transaction.replace(R.id.fragment, frags.get(tab.getPosition())).commitNow();
+	}
 
-			@Override
-			public void onTabUnselected(TabLayout.Tab tab) {
+	@Override
+	public void onTabUnselected(TabLayout.Tab tab) {
 
-			}
+	}
 
-			@Override
-			public void onTabReselected(TabLayout.Tab tab) {
+	@Override
+	public void onTabReselected(TabLayout.Tab tab) {
 
-			}
-		});
 	}
 }

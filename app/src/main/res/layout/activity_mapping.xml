@@ -46,10 +46,11 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tabLayout" android:id="@+id/holder" android:fillViewport="true">
         <fragment
-                android:name="com.yago.texsnapper.view.fragment.HeightFragment"
-                android:id="@+id/fragment" tools:layout="@layout/fragment_diffuse"
+                android:id="@+id/fragment"
                 tools:layout_editor_absoluteY="48dp" android:layout_height="wrap_content"
-                android:layout_width="match_parent"/>
+                android:layout_width="match_parent"
+                tools:layout="@layout/fragment_diffuse"
+                android:name="com.yago.texsnapper.view.fragment.DiffuseFragment"/>
     </ScrollView>
     <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"

@@ -63,7 +63,7 @@
     <SeekBar
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/normal_contrast" android:max="100"
+            android:id="@+id/normal_contrast" android:max="1000"
             app:layout_constraintEnd_toEndOf="@+id/preview_pic"
             app:layout_constraintBottom_toBottomOf="@+id/textView3" app:layout_constraintTop_toTopOf="@+id/textView3"
             android:progress="0" android:background="@android:drawable/divider_horizontal_dark"
@@ -71,7 +71,7 @@
     <SeekBar
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/normal_bright" android:max="100"
+            android:id="@+id/normal_bright" android:max="511"
             app:layout_constraintEnd_toEndOf="@+id/preview_pic"
             app:layout_constraintBottom_toBottomOf="@+id/textView5" app:layout_constraintTop_toTopOf="@+id/textView5"
             android:progress="0" android:background="@android:drawable/divider_horizontal_dark"
