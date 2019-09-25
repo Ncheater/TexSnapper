@@ -5,8 +5,8 @@ import android.graphics.Color;
 import com.yago.texsnapper.Utils;
 
 public class DiffuseConfigs extends MapConfig {
-	private int contrast = 0;
-	private int brightness = 0;
+	private int contrast = 1000;
+	private int brightness = 256;
 	private int shadow = 0;
 	private int light = 0;
 
@@ -51,15 +51,15 @@ public class DiffuseConfigs extends MapConfig {
 		int[] pixels = new int[map.getWidth() * map.getHeight()];
 		map.getPixels(pixels, 0, map.getWidth(), 0, 0, map.getWidth(), map.getHeight());
 		for (int i = 0; i < pixels.length; i++) {
-				int r = Color.red(pixels[i]);
-				int g = Color.green(pixels[i]);
-				int b = Color.blue(pixels[i]);
+				float[] hsv = new float[3];
+				Color.colorToHSV(pixels[i], hsv);
 
-				int mean = Math.round((r + g + b) / 3f);
-				if (mean < 128) {
-					pixels[i] = Color.rgb(Math.round(r + 128 * shadow / 100f), Math.round(g + 128 * shadow / 100f), Math.round(b + 128 * shadow / 100f));
-				} else {
-					pixels[i] = Color.rgb(Math.round(r - 128 * shadow / 100f), Math.round(g - 128 * shadow / 100f), Math.round(b - 128 * shadow / 100f));
+				if (hsv[2] < 0.3) {
+					hsv[2] += (1 - hsv[2]) * (shadow / 100f);
+					pixels[i] = Color.HSVToColor(hsv);
+				} else if (hsv[2] > 0.7){
+					hsv[2] -= hsv[2] * (light / 100f);
+					pixels[i] = Color.HSVToColor(hsv);
 			}
 		}
 
