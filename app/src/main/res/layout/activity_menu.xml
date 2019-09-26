@@ -29,7 +29,7 @@
 			app:layout_constraintHorizontal_bias="0.33" android:adjustViewBounds="true"
 	/>
 	<TextView
-			android:text="Tex     napper"
+			android:text="Tex     canner"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:id="@+id/textView"

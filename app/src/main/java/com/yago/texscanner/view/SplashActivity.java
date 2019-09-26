@@ -1,17 +1,14 @@
-package com.yago.texsnapper.view;
+package com.yago.texscanner.view;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.Application;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import com.yago.texsnapper.R;
+import com.yago.texscanner.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -50,7 +50,7 @@
                 tools:layout_editor_absoluteY="48dp" android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 tools:layout="@layout/fragment_diffuse"
-                android:name="com.yago.texsnapper.view.fragment.DiffuseFragment"/>
+                android:name="com.yago.texscanner.view.fragment.DiffuseFragment"/>
     </ScrollView>
     <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"

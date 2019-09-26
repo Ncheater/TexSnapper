@@ -1,4 +1,4 @@
-package com.yago.texsnapper.view;
+package com.yago.texscanner.view;
 
 import android.Manifest;
 import android.app.Activity;
@@ -17,9 +17,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
-import com.yago.texsnapper.GlobalContext;
-import com.yago.texsnapper.R;
-import com.yago.texsnapper.Utils;
+import com.yago.texscanner.GlobalContext;
+import com.yago.texscanner.R;
+import com.yago.texscanner.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,7 +55,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
 				if (!CAMERA) ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 0);
 				File img = makeTempFile();
 				assert img != null;
-				startActivityForResult(new Intent("android.media.action.IMAGE_CAPTURE").putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, "com.yago.texsnapper", img)), Utils.CAMERA);
+				startActivityForResult(new Intent("android.media.action.IMAGE_CAPTURE").putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, "com.yago.texscanner", img)), Utils.CAMERA);
 				break;
 			case R.id.gallery_btn:
 				startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI), Utils.GALLERY);

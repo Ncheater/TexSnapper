@@ -1,4 +1,4 @@
-package com.yago.texsnapper;
+package com.yago.texscanner;
 
 import org.junit.Test;
 

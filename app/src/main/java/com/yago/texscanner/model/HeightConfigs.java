@@ -1,15 +1,15 @@
-package com.yago.texsnapper.model;
+package com.yago.texscanner.model;
 
 import android.graphics.Bitmap;
 
-public class RoughnessConfigs extends MapConfig {
+public class HeightConfigs extends MapConfig {
 	private int contrast = 0;
 	private int brightness = 0;
 	private int smoothness = 0;
 	private int fac = 0;
 	private boolean inverted = false;
 
-	public RoughnessConfigs(Bitmap map) {
+	public HeightConfigs(Bitmap map) {
 		super(map);
 	}
 

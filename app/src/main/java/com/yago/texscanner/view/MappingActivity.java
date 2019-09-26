@@ -1,4 +1,4 @@
-package com.yago.texsnapper.view;
+package com.yago.texscanner.view;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,8 +9,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
-import com.yago.texsnapper.R;
-import com.yago.texsnapper.view.fragment.*;
+import com.yago.texscanner.R;
+import com.yago.texscanner.view.fragment.*;
 
 import java.util.ArrayList;
 import java.util.List;

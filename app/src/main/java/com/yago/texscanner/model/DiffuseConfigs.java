@@ -1,8 +1,7 @@
-package com.yago.texsnapper.model;
+package com.yago.texscanner.model;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import com.yago.texsnapper.Utils;
+import com.yago.texscanner.Utils;
 
 public class DiffuseConfigs extends MapConfig {
 	private int contrast = 1000;
@@ -47,23 +46,21 @@ public class DiffuseConfigs extends MapConfig {
 	}
 
 	public Bitmap render() {
-		Bitmap map = Utils.rescale(getMap(), contrast / 1000f, brightness - 256);
-		int[] pixels = new int[map.getWidth() * map.getHeight()];
+		final Bitmap map = Utils.rescale(getMap(), contrast / 1000f, brightness - 256);
+		final int[] pixels = new int[map.getWidth() * map.getHeight()];
+		final int length = pixels.length;
 		map.getPixels(pixels, 0, map.getWidth(), 0, 0, map.getWidth(), map.getHeight());
-		for (int i = 0; i < pixels.length; i++) {
-				float[] hsv = new float[3];
-				Color.colorToHSV(pixels[i], hsv);
 
-				if (hsv[2] < 0.3) {
-					hsv[2] += (1 - hsv[2]) * (shadow / 100f);
-					pixels[i] = Color.HSVToColor(hsv);
-				} else if (hsv[2] > 0.7){
-					hsv[2] -= hsv[2] * (light / 100f);
-					pixels[i] = Color.HSVToColor(hsv);
+		final float[][] hsv = Utils.toHSV(pixels);
+		for (int i = 0; i < length; i++) {
+			if (hsv[i][2] < 0.4) {
+				hsv[i][2] += (1 - hsv[i][2]) * (shadow / 100f);
+			} else if (hsv[i][2] > 0.6) {
+				hsv[i][2] -= hsv[i][2] * (light / 100f);
 			}
 		}
 
-		map.setPixels(pixels, 0, map.getWidth(), 0, 0, map.getWidth(), map.getHeight());
+		map.setPixels(Utils.toRGB(hsv), 0, map.getWidth(), 0, 0, map.getWidth(), map.getHeight());
 
 		return map;
 	}

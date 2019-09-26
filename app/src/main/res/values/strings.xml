@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TexSnapper</string>
+    <string name="app_name">TexScanner</string>
     <string name="title_activity_mapping">MappingActivity</string>
     <string name="title_diffuse">Difusão</string>
     <string name="title_roughness">Dureza</string>

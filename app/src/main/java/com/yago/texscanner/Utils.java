@@ -1,32 +1,34 @@
-package com.yago.texsnapper;
+package com.yago.texscanner;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.*;
 import android.net.Uri;
-import android.widget.Toast;
 import com.google.ar.sceneform.math.Vector3;
 import com.vansuita.gaussianblur.GaussianBlur;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Utils {
 	public static final int CAMERA = 1;
 	public static final int GALLERY = 2;
 	public static final int CROPPER = 3;
+	private static final ExecutorService renderThread = Executors.newSingleThreadExecutor();
+
+	public static void run(Runnable task) {
+		renderThread.execute(task);
+	}
 
 	public static void doCrop(Activity activity, Uri picUri) {
-		try {
-			Intent crop = new Intent("com.android.camera.action.CROP");
-			crop.setDataAndType(picUri, "image/*");
-			crop.putExtra("crop", true);
-			crop.putExtra("aspectX", 1);
-			crop.putExtra("aspectY", 1);
-			crop.putExtra("return-data", true);
-			activity.startActivityForResult(crop, CROPPER);
-		} catch (ActivityNotFoundException e) {
-			Toast.makeText(activity, "Seu dispositivo não suporta recortar imagens, a imagem será ajustada a partir do centro.", Toast.LENGTH_LONG).show();
-		}
+		Intent crop = new Intent("com.android.camera.action.CROP");
+		crop.setDataAndType(picUri, "image/*");
+		crop.putExtra("crop", true);
+		crop.putExtra("aspectX", 1);
+		crop.putExtra("aspectY", 1);
+		crop.putExtra("return-data", true);
+		activity.startActivityForResult(crop, CROPPER);
 	}
 
 	public static int average(int... values) {
@@ -35,6 +37,22 @@ public class Utils {
 			sum += v;
 		}
 		return Math.round((float) sum / values.length);
+	}
+
+	public static float[][] toHSV(int[] rgb) {
+		float[][] hsv = new float[3][rgb.length];
+		for (int i = 0; i < rgb.length; i++) {
+			Color.colorToHSV(rgb[i], hsv[i]);
+		}
+		return hsv;
+	}
+
+	public static int[] toRGB(float[][] hsv) {
+		int[] rgb = new int[hsv.length];
+		for (int i = 0; i < hsv.length; i++) {
+			rgb[i] = Color.HSVToColor(hsv[i]);
+		}
+		return rgb;
 	}
 
 	public static Bitmap toGrayscale(Bitmap map) {

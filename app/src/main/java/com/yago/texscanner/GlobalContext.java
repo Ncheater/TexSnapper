@@ -1,8 +1,8 @@
-package com.yago.texsnapper;
+package com.yago.texscanner;
 
 import android.app.Application;
 import android.graphics.Bitmap;
-import com.yago.texsnapper.model.*;
+import com.yago.texscanner.model.*;
 
 import java.util.HashMap;
 

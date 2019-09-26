@@ -1,4 +1,4 @@
-package com.yago.texsnapper.model;
+package com.yago.texscanner.model;
 
 import android.graphics.Bitmap;
 

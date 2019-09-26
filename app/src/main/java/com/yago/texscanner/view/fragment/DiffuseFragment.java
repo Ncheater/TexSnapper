@@ -1,4 +1,4 @@
-package com.yago.texsnapper.view.fragment;
+package com.yago.texscanner.view.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,10 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
-import com.yago.texsnapper.GlobalContext;
-import com.yago.texsnapper.MapType;
-import com.yago.texsnapper.R;
-import com.yago.texsnapper.model.DiffuseConfigs;
+import com.yago.texscanner.GlobalContext;
+import com.yago.texscanner.MapType;
+import com.yago.texscanner.R;
+import com.yago.texscanner.Utils;
+import com.yago.texscanner.model.DiffuseConfigs;
 
 public class DiffuseFragment extends Fragment implements SeekBar.OnSeekBarChangeListener {
 
@@ -64,6 +65,11 @@ public class DiffuseFragment extends Fragment implements SeekBar.OnSeekBarChange
 	}
 
 	private void refresh() {
-		img.setImageBitmap(configs.render());
+		Utils.run(new Runnable() {
+			@Override
+			public void run() {
+				img.setImageBitmap(configs.render());
+			}
+		});
 	}
 }
