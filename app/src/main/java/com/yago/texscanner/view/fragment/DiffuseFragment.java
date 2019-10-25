@@ -36,20 +36,20 @@ public class DiffuseFragment extends Fragment implements SeekBar.OnSeekBarChange
 		assert getActivity() != null;
 		configs = (DiffuseConfigs) ((GlobalContext) getActivity().getApplication()).getMap(MapType.DIFFUSE);
 
-		refresh();
+		init();
 		return v;
 	}
 
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
 		if (seekBar == contrast) {
-			configs.setContrast(contrast.getProgress());
+			configs.setContrast(i);
 		} else if (seekBar == brightness) {
-			configs.setBrightness(brightness.getProgress());
+			configs.setBrightness(i);
 		} else if (seekBar == shadow) {
-			configs.setShadow(shadow.getProgress());
+			configs.setShadow(i);
 		} else if (seekBar == light) {
-			configs.setLight(light.getProgress());
+			configs.setLight(i);
 		}
 		refresh();
 	}
@@ -65,11 +65,11 @@ public class DiffuseFragment extends Fragment implements SeekBar.OnSeekBarChange
 	}
 
 	private void refresh() {
-		Utils.run(new Runnable() {
-			@Override
-			public void run() {
-				img.setImageBitmap(configs.render());
-			}
-		});
+		Utils.run(img, configs, configs.getMap());
+	}
+
+	private void init() {
+		img.setImageBitmap(configs.render(configs.getMap()));
+		configs.setBuffer(configs.getMap());
 	}
 }

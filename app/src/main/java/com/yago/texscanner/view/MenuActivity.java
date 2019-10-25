@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -51,15 +52,33 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
 
 		switch (clk.getId()) {
 			case R.id.camera_btn:
-				boolean CAMERA = ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
-				if (!CAMERA) ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 0);
-				File img = makeTempFile();
-				assert img != null;
-				startActivityForResult(new Intent("android.media.action.IMAGE_CAPTURE").putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, "com.yago.texscanner", img)), Utils.CAMERA);
-				break;
+				if (ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+					ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 0);
+				if (ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+					File img = makeTempFile();
+					assert img != null;
+					startActivityForResult(new Intent("android.media.action.IMAGE_CAPTURE").putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, "com.yago.texscanner", img)), Utils.CAMERA);
+					break;
+				} else {
+					Toast.makeText(this, "É necessário permitir o acesso à camera para utilizar esta função", Toast.LENGTH_LONG).show();
+					break;
+				}
 			case R.id.gallery_btn:
 				startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI), Utils.GALLERY);
 				break;
+		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		if (requestCode == Utils.CAMERA) {
+			if (Utils.sum(grantResults) == 0) {
+				File img = makeTempFile();
+				assert img != null;
+				startActivityForResult(new Intent("android.media.action.IMAGE_CAPTURE").putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, "com.yago.texscanner", img)), Utils.CAMERA);
+			} else {
+				Toast.makeText(this, "É necessário permitir o acesso à camera para utilizar esta função", Toast.LENGTH_LONG).show();
+			}
 		}
 	}
 
@@ -85,7 +104,9 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
 				if (resultCode == Activity.RESULT_OK) {
 					assert data != null;
 					assert data.getExtras() != null;
-					Bitmap img = (Bitmap) data.getExtras().get("data");
+					Bitmap src = (Bitmap) data.getExtras().get("data");
+					assert src != null;
+					Bitmap img = Bitmap.createBitmap(src, 0, 0, src.getWidth() - (src.getWidth() % 4), src.getHeight() - (src.getHeight() % 4));
 					global.setSourceImage(img);
 					Toast.makeText(this, "Imagem cortada com sucesso!", Toast.LENGTH_SHORT).show();
 					startActivity(new Intent(MenuActivity.this, MappingActivity.class));

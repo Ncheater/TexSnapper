@@ -1,8 +1,10 @@
 package com.yago.texscanner.model;
 
 import android.graphics.Bitmap;
+import android.support.annotation.Nullable;
 
-public class MapConfig {
+public abstract class MapConfig {
+	private Bitmap buffer = null;
 	private final Bitmap map;
 
 	MapConfig(Bitmap map) {
@@ -11,5 +13,15 @@ public class MapConfig {
 
 	public Bitmap getMap() {
 		return map;
+	}
+
+	public abstract Bitmap render(@Nullable Bitmap base);
+
+	public Bitmap getBuffer() {
+		return buffer;
+	}
+
+	public void setBuffer(Bitmap img) {
+		this.buffer = img;
 	}
 }

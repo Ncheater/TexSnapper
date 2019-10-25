@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class GlobalContext extends Application {
 	private Bitmap sourceImage;
-	private final HashMap<MapType, MapConfig> maps = new HashMap<>();
+	private HashMap<MapType, MapConfig> maps = new HashMap<>();
 	private String currPath;
 
 	public void setSourceImage(Bitmap sourceImage) {
@@ -18,15 +18,20 @@ public class GlobalContext extends Application {
 	public MapConfig getMap(MapType type) {
 		switch (type) {
 			case DIFFUSE:
-				if (maps.get(type) == null) return new DiffuseConfigs(sourceImage);
+				if (maps.get(type) == null) maps.put(type, new DiffuseConfigs(sourceImage));
+				break;
 			case HEIGHT:
-				if (maps.get(type) == null) return new HeightConfigs(sourceImage);
+				if (maps.get(type) == null) maps.put(type, new HeightConfigs(sourceImage));
+				break;
 			case ROUGHNESS:
-				if (maps.get(type) == null) return new RoughnessConfigs(sourceImage);
+				if (maps.get(type) == null) maps.put(type, new RoughnessConfigs(sourceImage));
+				break;
 			case GLOSSINESS:
-				if (maps.get(type) == null) return new GlossinessConfigs(sourceImage);
+				if (maps.get(type) == null) maps.put(type, new GlossinessConfigs(sourceImage));
+				break;
 			case NORMAL:
-				if (maps.get(type) == null) return new NormalConfigs(sourceImage);
+				if (maps.get(type) == null) maps.put(type, new NormalConfigs(sourceImage));
+				break;
 		}
 		return maps.get(type);
 	}
@@ -37,5 +42,10 @@ public class GlobalContext extends Application {
 
 	public void setCurrPath(String currPath) {
 		this.currPath = currPath;
+	}
+	public void release() {
+		sourceImage = null;
+		maps = new HashMap<>();
+		currPath = null;
 	}
 }
