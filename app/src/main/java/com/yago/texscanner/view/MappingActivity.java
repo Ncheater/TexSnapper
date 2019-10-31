@@ -189,7 +189,7 @@ public class MappingActivity extends AppCompatActivity implements TabLayout.OnTa
 			}
 			runOnUiThread(() -> {
 				overlay.setVisibility(View.INVISIBLE);
-				Toast.makeText(null, "Texturas salvas com sucesso em " + path, Toast.LENGTH_LONG).show();
+				Toast.makeText(this, "Texturas salvas com sucesso em " + path, Toast.LENGTH_LONG).show();
 			});
 
 			finish();
