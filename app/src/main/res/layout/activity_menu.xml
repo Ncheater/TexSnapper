@@ -36,7 +36,7 @@
 			app:layout_constraintEnd_toEndOf="parent"
 			android:singleLine="true" android:layout_marginBottom="75dp"
 			app:layout_constraintBottom_toBottomOf="@+id/imageView3" android:shadowDx="1" android:shadowDy="1"
-			android:shadowRadius="1" android:shadowColor="#000"/>
+			android:shadowRadius="1" android:shadowColor="@android:color/black"/>
 	<ImageButton
 			android:layout_width="162dp"
 			android:layout_height="148dp" app:srcCompat="@drawable/camera"

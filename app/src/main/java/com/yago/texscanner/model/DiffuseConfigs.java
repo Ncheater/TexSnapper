@@ -2,6 +2,7 @@ package com.yago.texscanner.model;
 
 import android.graphics.Bitmap;
 import android.support.v4.graphics.ColorUtils;
+import com.yago.texscanner.GlobalContext;
 import com.yago.texscanner.Utils;
 
 public class DiffuseConfigs extends MapConfig {
@@ -10,8 +11,8 @@ public class DiffuseConfigs extends MapConfig {
 	private int shadow = 0;
 	private int light = 0;
 
-	public DiffuseConfigs(Bitmap map) {
-		super(map);
+	public DiffuseConfigs(GlobalContext context) {
+		super(context);
 	}
 
 	public void setContrast(int contrast) {
@@ -34,10 +35,14 @@ public class DiffuseConfigs extends MapConfig {
 	public Bitmap render(Bitmap base) {
 		final Bitmap map = Utils.rescale(base, contrast / 1000f, brightness - 256);
 		final int[] pixels = new int[map.getWidth() * map.getHeight()];
+		final float[][] hsls = new float[pixels.length][3];
 		map.getPixels(pixels, 0, map.getWidth(), 0, 0, map.getWidth(), map.getHeight());
 
 		for (int i = 0; i < pixels.length; i++) {
-			pixels[i] = adjust(pixels[i], shadow, light);
+			ColorUtils.colorToHSL(pixels[i], hsls[i]);
+		}
+		for (int i = 0; i < pixels.length; i++) {
+			adjust(i, pixels, hsls[i], shadow, light);
 		}
 
 		map.setPixels(pixels, 0, map.getWidth(), 0, 0, map.getWidth(), map.getHeight());
@@ -45,10 +50,7 @@ public class DiffuseConfigs extends MapConfig {
 		return map;
 	}
 
-	private static int adjust(int color, int shadow, int light) {
-		float[] hsl = new float[3];
-		ColorUtils.colorToHSL(color, hsl);
-
+	private static void adjust(int i, int[] pixels, float[] hsl, int shadow, int light) {
 		if (hsl[2] < 0.5f) {
 			hsl[2] += (0.5f - hsl[2]) * ((1 - hsl[2]) * (shadow / 50f));
 			hsl[1] -= (shadow / 100f) * hsl[1];
@@ -61,6 +63,6 @@ public class DiffuseConfigs extends MapConfig {
 			}
 		}
 
-		return ColorUtils.HSLToColor(hsl);
+		pixels[i] = ColorUtils.HSLToColor(hsl);
 	}
 }

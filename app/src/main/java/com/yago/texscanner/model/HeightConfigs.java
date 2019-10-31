@@ -2,6 +2,7 @@ package com.yago.texscanner.model;
 
 import android.graphics.Bitmap;
 import android.support.v4.graphics.ColorUtils;
+import com.yago.texscanner.GlobalContext;
 import com.yago.texscanner.Utils;
 
 public class HeightConfigs extends MapConfig {
@@ -10,8 +11,8 @@ public class HeightConfigs extends MapConfig {
 	private int fac = 50;
 	private boolean inverted = false;
 
-	public HeightConfigs(Bitmap map) {
-		super(map);
+	public HeightConfigs(GlobalContext context) {
+		super(context);
 	}
 
 	public void setContrast(int contrast) {
@@ -34,10 +35,14 @@ public class HeightConfigs extends MapConfig {
 	public Bitmap render(Bitmap base) {
 		final Bitmap map = Utils.rescale(base, contrast / 1000f, brightness - 256);
 		final int[] pixels = new int[map.getWidth() * map.getHeight()];
+		final float[][] hsls = new float[pixels.length][3];
 		map.getPixels(pixels, 0, map.getWidth(), 0, 0, map.getWidth(), map.getHeight());
 
 		for (int i = 0; i < pixels.length; i++) {
-			pixels[i] = adjust(pixels[i], fac);
+			ColorUtils.colorToHSL(pixels[i], hsls[i]);
+		}
+		for (int i = 0; i < pixels.length; i++) {
+			adjust(i, pixels, hsls[i], fac);
 		}
 
 		map.setPixels(pixels, 0, map.getWidth(), 0, 0, map.getWidth(), map.getHeight());
@@ -45,16 +50,13 @@ public class HeightConfigs extends MapConfig {
 		return Utils.toGrayscale(map, inverted);
 	}
 
-	private static int adjust(int color, int fac) {
-		float[] hsl = new float[3];
-		ColorUtils.colorToHSL(color, hsl);
-
+	private static void adjust(int i, int[] pixels, float[] hsl, int fac) {
 		if (hsl[2] > 0.5f) {
 			hsl[2] += (hsl[2] - 0.5f) * ((1 - hsl[2]) * (fac / 25f));
 		} else if (hsl[2] < 0.5f) {
 			hsl[2] -= (0.5f - hsl[2]) * (hsl[2] * (fac / 25f));
 		}
 
-		return ColorUtils.HSLToColor(hsl);
+		pixels[i] = ColorUtils.HSLToColor(hsl);
 	}
 }

@@ -1,6 +1,5 @@
 package com.yago.texscanner.view.fragment;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import android.widget.Switch;
 import com.yago.texscanner.GlobalContext;
 import com.yago.texscanner.MapType;
 import com.yago.texscanner.R;
-import com.yago.texscanner.Utils;
 import com.yago.texscanner.model.HeightConfigs;
 
 public class HeightFragment extends Fragment implements SeekBar.OnSeekBarChangeListener {
@@ -20,7 +18,6 @@ public class HeightFragment extends Fragment implements SeekBar.OnSeekBarChangeL
 	private ImageView img;
 	private SeekBar contrast, brightness, fac;
 	private HeightConfigs configs;
-	private Bitmap baseBitmap;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,23 +31,19 @@ public class HeightFragment extends Fragment implements SeekBar.OnSeekBarChangeL
 		contrast.setOnSeekBarChangeListener(this);
 		brightness.setOnSeekBarChangeListener(this);
 		fac.setOnSeekBarChangeListener(this);
-		invert.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				boolean checked = ((Switch) view).isChecked();
-				if (checked) {
-					configs.setInverted(true);
-					refresh();
-				} else {
-					configs.setInverted(false);
-					refresh();
-				}
+		invert.setOnClickListener(view -> {
+			boolean checked = ((Switch) view).isChecked();
+			if (checked) {
+				configs.setInverted(true);
+				refresh();
+			} else {
+				configs.setInverted(false);
+				refresh();
 			}
 		});
 
 		assert getActivity() != null;
 		configs = (HeightConfigs) ((GlobalContext) getActivity().getApplication()).getMap(MapType.HEIGHT);
-		baseBitmap = ((GlobalContext) getActivity().getApplication()).getMap(MapType.DIFFUSE).getBuffer();
 
 		init();
 		return v;
@@ -79,11 +72,12 @@ public class HeightFragment extends Fragment implements SeekBar.OnSeekBarChangeL
 	}
 
 	private void refresh() {
-		Utils.run(img, configs, configs.getMap());
+		img.setImageBitmap(configs.render(configs.getMap()));
+		configs.setBuffer(configs.render(configs.getMap()));
 	}
 
 	private void init() {
-		img.setImageBitmap(configs.render(baseBitmap));
-		configs.setBuffer(baseBitmap);
+		img.setImageBitmap(configs.render(configs.getContext().getMap(MapType.DIFFUSE).getBuffer()));
+		configs.setBuffer(configs.render(configs.getContext().getMap(MapType.DIFFUSE).getBuffer()));
 	}
 }

@@ -1,6 +1,5 @@
 package com.yago.texscanner.view.fragment;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import android.widget.Switch;
 import com.yago.texscanner.GlobalContext;
 import com.yago.texscanner.MapType;
 import com.yago.texscanner.R;
-import com.yago.texscanner.Utils;
 import com.yago.texscanner.model.GlossinessConfigs;
 
 public class GlossinessFragment extends Fragment implements SeekBar.OnSeekBarChangeListener {
@@ -20,7 +18,6 @@ public class GlossinessFragment extends Fragment implements SeekBar.OnSeekBarCha
 	private ImageView img;
 	private SeekBar contrast, brightness, fac;
 	private GlossinessConfigs configs;
-	private Bitmap baseBitmap;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,7 +64,6 @@ public class GlossinessFragment extends Fragment implements SeekBar.OnSeekBarCha
 
 		assert getActivity() != null;
 		configs = (GlossinessConfigs) ((GlobalContext) getActivity().getApplication()).getMap(MapType.GLOSSINESS);
-		baseBitmap = ((GlobalContext) getActivity().getApplication()).getMap(MapType.DIFFUSE).getBuffer();
 
 		init();
 		return v;
@@ -96,11 +92,10 @@ public class GlossinessFragment extends Fragment implements SeekBar.OnSeekBarCha
 	}
 
 	private void refresh() {
-		Utils.run(img, configs, configs.getMap());
+		img.setImageBitmap(configs.render(configs.getMap()));
 	}
 
 	private void init() {
-		img.setImageBitmap(configs.render(baseBitmap));
-		configs.setBuffer(baseBitmap);
+		img.setImageBitmap(configs.render(configs.getContext().getMap(MapType.DIFFUSE).getBuffer()));
 	}
 }

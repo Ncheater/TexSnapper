@@ -8,10 +8,10 @@
     <SeekBar
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/normal_smoothness" android:max="50"
+            android:id="@+id/normal_smoothness" android:max="19"
             app:layout_constraintEnd_toEndOf="@+id/preview_pic"
             app:layout_constraintBottom_toBottomOf="@+id/textView4" app:layout_constraintTop_toTopOf="@+id/textView4"
-            android:progress="15" android:background="@android:drawable/divider_horizontal_dark"
+            android:progress="4" android:background="@android:drawable/divider_horizontal_dark"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline"/>
     <TextView
@@ -46,7 +46,7 @@
     <SeekBar
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/normal_power" android:max="100"
+            android:id="@+id/normal_power" android:max="20"
             app:layout_constraintEnd_toEndOf="@+id/preview_pic"
             app:layout_constraintBottom_toBottomOf="@+id/textView6" app:layout_constraintTop_toTopOf="@+id/textView6"
             android:progress="0" android:background="@android:drawable/divider_horizontal_dark"

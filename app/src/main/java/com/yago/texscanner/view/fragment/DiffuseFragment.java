@@ -10,7 +10,6 @@ import android.widget.SeekBar;
 import com.yago.texscanner.GlobalContext;
 import com.yago.texscanner.MapType;
 import com.yago.texscanner.R;
-import com.yago.texscanner.Utils;
 import com.yago.texscanner.model.DiffuseConfigs;
 
 public class DiffuseFragment extends Fragment implements SeekBar.OnSeekBarChangeListener {
@@ -65,11 +64,12 @@ public class DiffuseFragment extends Fragment implements SeekBar.OnSeekBarChange
 	}
 
 	private void refresh() {
-		Utils.run(img, configs, configs.getMap());
+		img.setImageBitmap(configs.render(configs.getMap()));
+		configs.setBuffer(configs.render(configs.getMap()));
 	}
 
 	private void init() {
 		img.setImageBitmap(configs.render(configs.getMap()));
-		configs.setBuffer(configs.getMap());
+		configs.setBuffer(configs.render(configs.getMap()));
 	}
 }

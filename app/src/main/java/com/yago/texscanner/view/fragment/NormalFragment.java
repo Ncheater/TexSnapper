@@ -9,10 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Switch;
+import com.vansuita.gaussianblur.GaussianBlur;
 import com.yago.texscanner.GlobalContext;
 import com.yago.texscanner.MapType;
 import com.yago.texscanner.R;
-import com.yago.texscanner.Utils;
 import com.yago.texscanner.model.NormalConfigs;
 
 public class NormalFragment extends Fragment implements SeekBar.OnSeekBarChangeListener {
@@ -58,11 +58,9 @@ public class NormalFragment extends Fragment implements SeekBar.OnSeekBarChangeL
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
 		if (seekBar == contrast) {
-			configs.setSmall(i);
+			configs.setContrast(i);
 		} else if (seekBar == brightness) {
-			configs.setBig(i);
-		} else if (seekBar == smoothness) {
-			configs.setSmoothness(i);
+			configs.setBrightness(i);
 		} else if (seekBar == strength) {
 			configs.setStrength(i);
 		}
@@ -80,11 +78,10 @@ public class NormalFragment extends Fragment implements SeekBar.OnSeekBarChangeL
 	}
 
 	private void refresh() {
-		Utils.run(img, configs, configs.getMap());
+		img.setImageBitmap(GaussianBlur.with(getContext()).radius(smoothness.getProgress() + 1).render(configs.render(baseBitmap)));
 	}
 
 	private void init() {
-		img.setImageBitmap(configs.render(baseBitmap));
-		configs.setBuffer(baseBitmap);
+		img.setImageBitmap(GaussianBlur.with(getContext()).radius(smoothness.getProgress() + 1).render(configs.render(baseBitmap)));
 	}
 }

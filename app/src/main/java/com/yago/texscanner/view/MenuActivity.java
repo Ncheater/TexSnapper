@@ -2,12 +2,14 @@ package com.yago.texscanner.view;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,11 +33,14 @@ import java.util.Locale;
 public class MenuActivity extends AppCompatActivity implements View.OnClickListener {
 
 	private GlobalContext global;
+	private Vibrator vibrator;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_menu);
+
+		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
 		ImageButton camera = findViewById(R.id.camera_btn);
 		ImageButton gallery = findViewById(R.id.gallery_btn);
@@ -49,6 +54,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
 	@Override
 	public void onClick(View view) {
 		ImageButton clk = (ImageButton) view;
+		vibrator.vibrate(15);
 
 		switch (clk.getId()) {
 			case R.id.camera_btn:

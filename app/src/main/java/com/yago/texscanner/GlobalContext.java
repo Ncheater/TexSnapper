@@ -15,22 +15,30 @@ public class GlobalContext extends Application {
 		this.sourceImage = sourceImage;
 	}
 
+	public Bitmap getSourceImage() {
+		return sourceImage;
+	}
+
+	public Bitmap getScaledImage() {
+		return Bitmap.createScaledBitmap(sourceImage, 256, 256, false);
+	}
+
 	public MapConfig getMap(MapType type) {
 		switch (type) {
 			case DIFFUSE:
-				if (maps.get(type) == null) maps.put(type, new DiffuseConfigs(sourceImage));
+				if (maps.get(type) == null) maps.put(type, new DiffuseConfigs(this));
 				break;
 			case HEIGHT:
-				if (maps.get(type) == null) maps.put(type, new HeightConfigs(sourceImage));
+				if (maps.get(type) == null) maps.put(type, new HeightConfigs(this));
 				break;
 			case ROUGHNESS:
-				if (maps.get(type) == null) maps.put(type, new RoughnessConfigs(sourceImage));
+				if (maps.get(type) == null) maps.put(type, new RoughnessConfigs(this));
 				break;
 			case GLOSSINESS:
-				if (maps.get(type) == null) maps.put(type, new GlossinessConfigs(sourceImage));
+				if (maps.get(type) == null) maps.put(type, new GlossinessConfigs(this));
 				break;
 			case NORMAL:
-				if (maps.get(type) == null) maps.put(type, new NormalConfigs(sourceImage));
+				if (maps.get(type) == null) maps.put(type, new NormalConfigs(this));
 				break;
 		}
 		return maps.get(type);

@@ -4,22 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.*;
 import android.net.Uri;
-import android.widget.ImageView;
-import com.yago.texscanner.model.MapConfig;
-import com.yago.texscanner.model.RenderHandler;
-import com.yago.texscanner.model.RenderTask;
 
 public class Utils {
 	public static final int READ_WRITE = 1;
 	public static final int CAMERA = 2;
 	public static final int GALLERY = 3;
 	public static final int CROPPER = 4;
-	public static final int NUMBER_OF_CORES = Runtime.getRuntime().availableProcessors();
-	private static final RenderHandler renderThread = new RenderHandler();
-
-	public static void run(ImageView holder, MapConfig config, Bitmap map) {
-		renderThread.render(new RenderTask(holder, config, map));
-	}
 
 	public static int sum(int[] values) {
 		int sum = 0;
@@ -27,6 +17,18 @@ public class Utils {
 			sum += value;
 		}
 		return sum;
+	}
+
+	private static float clamp(float value, float min, float max) {
+		return Math.max(min, Math.min(max, value));
+	}
+
+	public static int adjustBrightness(int color, float brightness) {
+		int r = Math.round(Utils.clamp(Color.red(color) * brightness, 0, 255));
+		int g = Math.round(Utils.clamp(Color.green(color) * brightness, 0, 255));
+		int b = Math.round(Utils.clamp(Color.blue(color) * brightness, 0, 255));
+
+		return Color.rgb(r, g, b);
 	}
 
 	public static void doCrop(Activity activity, Uri picUri) {

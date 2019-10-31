@@ -3,34 +3,29 @@ package com.yago.texscanner.model;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import com.google.ar.sceneform.math.Vector3;
-import com.vansuita.gaussianblur.GaussianBlur;
+import com.yago.texscanner.GlobalContext;
 import com.yago.texscanner.Utils;
 
 public class NormalConfigs extends MapConfig {
-	private int small = 1000;
-	private int big = 256;
+	private int contrast = 1000;
+	private int brightness = 256;
 	private int strength = 0;
-	private int smoothness = 15;
 	private boolean inverted = false;
 
-	public NormalConfigs(Bitmap map) {
-		super(map);
+	public NormalConfigs(GlobalContext context) {
+		super(context);
 	}
 
-	public void setSmall(int small) {
-		this.small = small;
+	public void setContrast(int contrast) {
+		this.contrast = contrast;
 	}
 
-	public void setBig(int big) {
-		this.big = big;
+	public void setBrightness(int brightness) {
+		this.brightness = brightness;
 	}
 
 	public void setStrength(int strength) {
 		this.strength = strength;
-	}
-
-	public void setSmoothness(int smoothness) {
-		this.smoothness = smoothness;
 	}
 
 	public void setInverted(boolean inverted) {
@@ -39,35 +34,34 @@ public class NormalConfigs extends MapConfig {
 
 	@Override
 	public Bitmap render(Bitmap base) {
-		final Bitmap map = Utils.rescale(base, small / 1000f, big - 256);
+		final Bitmap map = Utils.rescale(base, contrast / 1000f, brightness - 256);
 		final int[] pixels = new int[map.getWidth() * map.getHeight()];
 		map.getPixels(pixels, 0, map.getWidth(), 0, 0, map.getWidth(), map.getHeight());
 
-		return makeNormalMap(map, smoothness, strength, inverted);
+		return makeNormalMap(map, strength, inverted);
 	}
 
-	private static Bitmap makeNormalMap(Bitmap input, int smoothness, int power, boolean invert) {
-		Bitmap output = Bitmap.createBitmap(input.getWidth(), input.getHeight(), input.getConfig());
+	private Bitmap makeNormalMap(Bitmap input, int power, boolean invert) {
+		Bitmap output = Bitmap.createBitmap(input);
 
-		input = GaussianBlur.with(null).radius(smoothness).render(input);
 		for (int y = 1; y < input.getHeight() - 1; y++) {
 			for (int x = 1; x < input.getWidth() - 1; x++) {
-				final double tl = Color.red(input.getPixel(x - 1, y + 1));
-				final double t = Color.red(input.getPixel(x, y + 1));
-				final double tr = Color.red(input.getPixel(x + 1, y + 1));
+				double tl = Color.red(input.getPixel(x - 1, y + 1));
+				double t = Color.red(input.getPixel(x, y + 1));
+				double tr = Color.red(input.getPixel(x + 1, y + 1));
 
-				final double r = Color.red(input.getPixel(x - 1, y));
-				final double l = Color.red(input.getPixel(x + 1, y));
+				double r = Color.red(input.getPixel(x - 1, y));
+				double l = Color.red(input.getPixel(x + 1, y));
 
-				final double bl = Color.red(input.getPixel(x - 1, y - 1));
-				final double b = Color.red(input.getPixel(x, y - 1));
-				final double br = Color.red(input.getPixel(x + 1, y - 1));
+				double bl = Color.red(input.getPixel(x - 1, y - 1));
+				double b = Color.red(input.getPixel(x, y - 1));
+				double br = Color.red(input.getPixel(x + 1, y - 1));
 
 				double xNormal = tl - tr + 2f * r - 2f * l + bl - br;
 				double yNormal = tl - bl + 2f * t - 2f * b + tr - br;
 
-				Vector3 X = new Vector3(1, 0, (float) (power * (invert ? -xNormal : xNormal)));
-				Vector3 Y = new Vector3(0, 1, (float) (power * (invert ? -yNormal : yNormal)));
+				Vector3 X = new Vector3(1, 0, (float) ((power + 1) / 1000f * (invert ? xNormal : -xNormal)));
+				Vector3 Y = new Vector3(0, 1, (float) ((power + 1) / 1000f * (invert ? yNormal : -yNormal)));
 
 				Vector3 normal = Vector3.cross(X, Y);
 				normal = normal.normalized();
@@ -104,6 +98,6 @@ public class NormalConfigs extends MapConfig {
 			}
 		}
 
-		return GaussianBlur.with(null).radius(smoothness).render(output);
+		return output;
 	}
 }
