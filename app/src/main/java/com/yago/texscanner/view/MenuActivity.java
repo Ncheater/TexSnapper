@@ -94,8 +94,9 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
 			case Utils.CAMERA:
 				if (resultCode == Activity.RESULT_OK) {
 					File file = new File(global.getCurrPath());
+					File out = makeTempFile();
 
-					Utils.doCrop(this, Uri.fromFile(file), Uri.fromFile(file));
+					Utils.doCrop(this, Uri.fromFile(file), Uri.fromFile(out));
 				}
 				break;
 			case Utils.GALLERY:
