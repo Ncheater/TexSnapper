@@ -27,8 +27,17 @@ public class SplashActivity extends AppCompatActivity {
 		if (ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) pendingPerms.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
 		if (pendingPerms.size() == 0) {
-			startActivity(new Intent(SplashActivity.this, MenuActivity.class));
-			finish();
+			Utils.executor.execute(() -> {
+				try {
+					Thread.sleep(1500);
+					runOnUiThread(() -> {
+						startActivity(new Intent(SplashActivity.this, MenuActivity.class));
+						finish();
+					});
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			});
 		} else {
 			ActivityCompat.requestPermissions(this, pendingPerms.toArray(new String[0]), Utils.READ_WRITE);
 		}
@@ -38,8 +47,17 @@ public class SplashActivity extends AppCompatActivity {
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 		if (requestCode == Utils.READ_WRITE) {
 			if (Utils.sum(grantResults) == 0) {
-				startActivity(new Intent(SplashActivity.this, MenuActivity.class));
-				finish();
+				Utils.executor.execute(() -> {
+					try {
+						Thread.sleep(1500);
+						runOnUiThread(() -> {
+							startActivity(new Intent(SplashActivity.this, MenuActivity.class));
+							finish();
+						});
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				});
 			} else {
 				Toast.makeText(this, "É necessário permitir o acesso aos arquivos locais para utilizar o aplicativo", Toast.LENGTH_LONG).show();
 				finishAffinity();

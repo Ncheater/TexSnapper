@@ -5,7 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -94,26 +94,23 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
 			case Utils.CAMERA:
 				if (resultCode == Activity.RESULT_OK) {
 					File file = new File(global.getCurrPath());
-					Utils.doCrop(this, Uri.fromFile(file));
+
+					Utils.doCrop(this, Uri.fromFile(file), Uri.fromFile(file));
 				}
 				break;
 			case Utils.GALLERY:
 				if (resultCode == Activity.RESULT_OK) {
 					assert data != null;
 					Uri uri = data.getData();
+					File out = makeTempFile();
 
 					assert uri != null;
-					Utils.doCrop(this, uri);
+					Utils.doCrop(this, uri, Uri.fromFile(out));
 				}
 				break;
 			case Utils.CROPPER:
 				if (resultCode == Activity.RESULT_OK) {
-					assert data != null;
-					assert data.getExtras() != null;
-					Bitmap src = (Bitmap) data.getExtras().get("data");
-					assert src != null;
-					Bitmap img = Bitmap.createBitmap(src, 0, 0, src.getWidth() - (src.getWidth() % 4), src.getHeight() - (src.getHeight() % 4));
-					global.setSourceImage(img);
+					global.setSourceImage(BitmapFactory.decodeFile(global.getCurrPath()));
 					Toast.makeText(this, "Imagem cortada com sucesso!", Toast.LENGTH_SHORT).show();
 					startActivity(new Intent(MenuActivity.this, MappingActivity.class));
 				}

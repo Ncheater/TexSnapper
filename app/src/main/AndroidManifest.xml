@@ -16,7 +16,8 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme.NoActionBar"
-            tools:replace="android:theme">
+            tools:replace="android:theme"
+            tools:ignore="GoogleAppIndexingWarning">
 
         <activity android:name="net.rdrei.android.dirchooser.DirectoryChooserActivity" />
         <activity android:name=".view.MappingActivity" android:screenOrientation="portrait"/>

@@ -34,11 +34,11 @@ public class NormalConfigs extends MapConfig {
 
 	@Override
 	public Bitmap render(Bitmap base) {
-		final Bitmap map = Utils.rescale(base, contrast / 1000f, brightness - 256);
-		final int[] pixels = new int[map.getWidth() * map.getHeight()];
-		map.getPixels(pixels, 0, map.getWidth(), 0, 0, map.getWidth(), map.getHeight());
+		setBuffer(Utils.rescale(base, contrast / 1000f, brightness - 256));
+		final int[] pixels = new int[getBuffer().getWidth() * getBuffer().getHeight()];
+		getBuffer().getPixels(pixels, 0, getBuffer().getWidth(), 0, 0, getBuffer().getWidth(), getBuffer().getHeight());
 
-		return makeNormalMap(map, strength, inverted);
+		return makeNormalMap(getBuffer(), strength, inverted);
 	}
 
 	private Bitmap makeNormalMap(Bitmap input, int power, boolean invert) {

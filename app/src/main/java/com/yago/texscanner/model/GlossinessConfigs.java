@@ -49,10 +49,10 @@ public class GlossinessConfigs extends MapConfig {
 
 			return ret;
 		} else {
-			final Bitmap map = Utils.rescale(base, contrast / 1000f, brightness - 256);
-			final int[] pixels = new int[map.getWidth() * map.getHeight()];
+			setBuffer(Utils.rescale(base, contrast / 1000f, brightness - 256));
+			final int[] pixels = new int[getBuffer().getWidth() * getBuffer().getHeight()];
 			final float[][] hsls = new float[pixels.length][3];
-			map.getPixels(pixels, 0, map.getWidth(), 0, 0, map.getWidth(), map.getHeight());
+			getBuffer().getPixels(pixels, 0, getBuffer().getWidth(), 0, 0, getBuffer().getWidth(), getBuffer().getHeight());
 
 			for (int i = 0; i < pixels.length; i++) {
 				ColorUtils.colorToHSL(pixels[i], hsls[i]);
@@ -61,9 +61,9 @@ public class GlossinessConfigs extends MapConfig {
 				adjust(i, pixels, hsls[i], fac);
 			}
 
-			map.setPixels(pixels, 0, map.getWidth(), 0, 0, map.getWidth(), map.getHeight());
+			getBuffer().setPixels(pixels, 0, getBuffer().getWidth(), 0, 0, getBuffer().getWidth(), getBuffer().getHeight());
 
-			return Utils.toGrayscale(map, inverted);
+			return Utils.toGrayscale(getBuffer(), inverted);
 		}
 	}
 

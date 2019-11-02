@@ -13,6 +13,7 @@ import com.vansuita.gaussianblur.GaussianBlur;
 import com.yago.texscanner.GlobalContext;
 import com.yago.texscanner.MapType;
 import com.yago.texscanner.R;
+import com.yago.texscanner.Utils;
 import com.yago.texscanner.model.NormalConfigs;
 
 public class NormalFragment extends Fragment implements SeekBar.OnSeekBarChangeListener {
@@ -78,7 +79,7 @@ public class NormalFragment extends Fragment implements SeekBar.OnSeekBarChangeL
 	}
 
 	private void refresh() {
-		img.setImageBitmap(GaussianBlur.with(getContext()).radius(smoothness.getProgress() + 1).render(configs.render(baseBitmap)));
+		Utils.executor.execute(() -> img.post(() -> img.setImageBitmap(GaussianBlur.with(getContext()).radius(smoothness.getProgress() + 1).render(configs.render(baseBitmap)))));
 	}
 
 	private void init() {

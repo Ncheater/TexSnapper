@@ -4,12 +4,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.*;
 import android.net.Uri;
+import android.provider.MediaStore;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Utils {
 	public static final int READ_WRITE = 1;
 	public static final int CAMERA = 2;
 	public static final int GALLERY = 3;
 	public static final int CROPPER = 4;
+	public static final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
 	public static int sum(int[] values) {
 		int sum = 0;
@@ -19,34 +24,17 @@ public class Utils {
 		return sum;
 	}
 
-	private static float clamp(float value, float min, float max) {
-		return Math.max(min, Math.min(max, value));
-	}
-
-	public static int adjustBrightness(int color, float brightness) {
-		int r = Math.round(Utils.clamp(Color.red(color) * brightness, 0, 255));
-		int g = Math.round(Utils.clamp(Color.green(color) * brightness, 0, 255));
-		int b = Math.round(Utils.clamp(Color.blue(color) * brightness, 0, 255));
-
-		return Color.rgb(r, g, b);
-	}
-
-	public static void doCrop(Activity activity, Uri picUri) {
+	public static void doCrop(Activity activity, Uri picUri, Uri uri) {
 		Intent crop = new Intent("com.android.camera.action.CROP");
-		crop.setDataAndType(picUri, "image/*");
-		crop.putExtra("crop", true);
-		crop.putExtra("aspectX", 1);
-		crop.putExtra("aspectY", 1);
-		crop.putExtra("return-data", true);
+		crop.setDataAndType(picUri, "image/*")
+				.putExtra("crop", true)
+				.putExtra("aspectX", 1)
+				.putExtra("aspectY", 1)
+				.putExtra("outputX", 512)
+				.putExtra("outputY", 512)
+				.putExtra("return-data", false)
+				.putExtra(MediaStore.EXTRA_OUTPUT, uri);
 		activity.startActivityForResult(crop, CROPPER);
-	}
-
-	public static int average(int... values) {
-		int sum = 0;
-		for (int v : values) {
-			sum += v;
-		}
-		return Math.round((float) sum / values.length);
 	}
 
 	public static Bitmap toGrayscale(Bitmap bmp, boolean inverted) {

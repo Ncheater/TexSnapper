@@ -73,13 +73,13 @@
             tools:layout_editor_absoluteX="8dp" android:background="#88000000" android:visibility="invisible"
             android:id="@+id/saving_overlay">
         <ProgressBar
-                style="?android:attr/progressBarStyle"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:id="@+id/saving_progress" app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
-                android:max="4" android:progress="0" android:indeterminate="false"/>
+                android:max="4" android:progress="0" android:indeterminate="false"
+        />
         <TextView
                 android:text="Saving..."
                 android:layout_width="wrap_content"

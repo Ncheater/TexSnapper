@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.yago.texscanner.GlobalContext;
 import com.yago.texscanner.MapType;
 import com.yago.texscanner.R;
+import com.yago.texscanner.Utils;
 import com.yago.texscanner.view.fragment.*;
 import net.rdrei.android.dirchooser.DirectoryChooserConfig;
 import net.rdrei.android.dirchooser.DirectoryChooserFragment;
@@ -28,7 +29,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executors;
 
 public class MappingActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener, DirectoryChooserFragment.OnFragmentInteractionListener {
 
@@ -59,7 +59,11 @@ public class MappingActivity extends AppCompatActivity implements TabLayout.OnTa
 		transaction.replace(R.id.fragment, frags.get(0)).commitNow();
 
 		save.hide();
-		save.setOnClickListener(view -> chooser.show(getFragmentManager(), null));
+		save.setOnClickListener(view -> {
+			if (!chooser.isAdded()) {
+				chooser.show(getFragmentManager(), null);
+			}
+		});
 
 		ViewGroup tabGroup = ((ViewGroup) tabs.getChildAt(0));
 
@@ -130,7 +134,7 @@ public class MappingActivity extends AppCompatActivity implements TabLayout.OnTa
 
 		overlay.setVisibility(View.VISIBLE);
 		findViewById(R.id.main_layout).setEnabled(false);
-		Executors.newSingleThreadExecutor().execute(() -> {
+		Utils.executor.execute(() -> {
 			String stamp = "texture_" + System.nanoTime();
 			Bitmap height = null;
 

@@ -11,6 +11,7 @@ import android.widget.Switch;
 import com.yago.texscanner.GlobalContext;
 import com.yago.texscanner.MapType;
 import com.yago.texscanner.R;
+import com.yago.texscanner.Utils;
 import com.yago.texscanner.model.RoughnessConfigs;
 
 public class RoughnessFragment extends Fragment implements SeekBar.OnSeekBarChangeListener {
@@ -72,7 +73,7 @@ public class RoughnessFragment extends Fragment implements SeekBar.OnSeekBarChan
 	}
 
 	private void refresh() {
-		img.setImageBitmap(configs.render(configs.getMap()));
+		Utils.executor.execute(() -> img.post(() -> img.setImageBitmap(configs.render(configs.getMap()))));
 	}
 
 	private void init() {
